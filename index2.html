@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+    <head>
+        <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+        <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+        <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
+        <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
+        <script>
+            AFRAME.registerComponent('videohandler', {
+                init: function () {
+                    var marker = this.el;
+                    this.carbonara = document.querySelector("#carbonara");
+                    this.lasaña = document.querySelector("#lasaña");
+
+                    marker.addEventListener('markerFound', function () {
+                        this.toggle = true;
+                        this.carbonara.play();
+                        this.lasaña.play();
+                    }.bind(this));
+
+                    marker.addEventListener('markerLost', function () {
+                        this.toggle = false;
+                        this.lasaña.pause();
+                        this.carbonara.pause();
+                    }.bind(this));
+                },
+            });
+        </script>
+    </head>
+
+    <body style="margin: 0; overflow: hidden;">
+        <a-scene
+            vr-mode-ui="enabled: false"
+            loading-screen="enabled: false;"
+            arjs="sourceType: webcam; debugUIEnabled: false;"
+            id="scene"
+            embedded
+            gesture-detector
+        >
+            <a-assets>
+                <video
+                    id="lasaña"
+                    src="https://cdn.glitch.global/cfc1b877-0dab-43c0-a186-e3da5ac2831c/lasa%C3%B1a.mp4?v=1673342638773"
+                    preload="auto"
+                    response-type="arraybuffer"
+                    loop
+                    crossorigin
+                    webkit-playsinline
+                    autoplay
+                    muted
+                    playsinline
+                ></video>
+            </a-assets>
+			
+			<a-assets>
+                <video
+                    id="carbonara"
+                    src="https://cdn.glitch.global/cfc1b877-0dab-43c0-a186-e3da5ac2831c/asset.mp4?v=1673262621936"
+                    preload="auto"
+                    response-type="arraybuffer"
+                    loop
+                    crossorigin
+                    webkit-playsinline
+                    autoplay
+                    muted
+                    playsinline
+                ></video>
+            </a-assets>
+
+            <a-marker
+                type="pattern"
+                preset="custom"
+                url="https://cdn.glitch.global/cfc1b877-0dab-43c0-a186-e3da5ac2831c/lasaña_marker.patt?v=1673390357883"
+                videohandler
+                smooth="true"
+                smoothCount="10"
+                smoothTolerance="0.01"
+                smoothThreshold="5"
+                raycaster="objects: .clickable"
+                emitevents="true"
+                cursor="fuse: false; rayOrigin: mouse;"
+                id="markerLasaña"
+            >
+                <a-video
+                    src="#lasaña"
+                    scale="1 1 1"
+                    position="0 0.1 0"
+                    rotation="-90 0 0"
+                    class="clickable"
+                    gesture-handler
+                ></a-video>
+            </a-marker>
+			
+			<a-marker
+                type="pattern"
+                preset="custom"
+                url="https://cdn.glitch.global/cfc1b877-0dab-43c0-a186-e3da5ac2831c/pattern-marker.patt?v=1673395082656"
+                videohandler
+                smooth="true"
+                smoothCount="10"
+                smoothTolerance="0.01"
+                smoothThreshold="5"
+                raycaster="objects: .clickable"
+                emitevents="true"
+                cursor="fuse: false; rayOrigin: mouse;"
+                id="markerCarbonara"
+            >
+                <a-video
+                    src="#carbonara"
+                    scale="1 1 1"
+                    position="0 0.1 0"
+                    rotation="-90 0 0"
+                    class="clickable"
+                    gesture-handler
+                ></a-video>
+            </a-marker>
+
+            <a-entity camera></a-entity>
+        </a-scene>
+    </body>
+</html>
